@@ -15,14 +15,9 @@ const CheckUserID = (request, response, next) => {
 
    if (index < 0) {
       return response.status(404).json({ message: "User not found" })
-   } else {
-      users[index] = updatedUser
-
-      return response.json(updatedUser)
-   }
-
+   } 
    request.userIndex = index
-
+   request.userId = id
    next()
 }
 
@@ -40,19 +35,23 @@ app.post('/users', (request, response) => {
 });
 
 app.put('/users/:id',CheckUserID, (request, response) => {
-
    const { name, age } = request.body
    const index = request.userIndex
+   const id = request.id
 
    const updatedUser = { id, name, age }
+
+   users[index] = updatedUser
+
+   return response.json(updatedUser)
 
 
 })
 
 app.delete('/users/:id',CheckUserID, (request, response) => {
-
    const index = request.userIndex
    users.splice(index, 1)
+
    return response.status(204).json()
 })
 
